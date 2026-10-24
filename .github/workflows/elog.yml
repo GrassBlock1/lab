@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: "22.x"
 
-      - run: bun --bun install
+      #- run: bun --bun install
 
       # 缓存 node_modules，缓存机制参见 GitHub 文档：https://help.github.com/en/actions/configuring-and-managing-workflows/caching-dependencies-to-speed-up-workflows
       - name: 缓存 node_modules

@@ -5,7 +5,7 @@ import HomePage from "@/components/HomePage.astro";
 // Conditionally import content if file exists
 let HomePageContent: AstroComponentFactory | undefined;
 try {
-	const module = await import("../content/index.md");
+	const module = await import("../content/index.mdx");
 	HomePageContent = module.Content;
 } catch {
 	// File doesn't exist or couldn't be imported

@@ -1,13 +1,13 @@
-import {getCollection} from "astro:content";
+import { getCollection } from "astro:content";
 
-const posts = await getCollection('posts')
+const posts = await getCollection("posts");
 
-const slugs = posts.map(post => post.id)
+const slugs = posts.map((post) => post.id);
 
-export const prerender = false
+export const prerender = false;
 
 export const GET = async () => {
-    const slug = slugs[Math.floor(Math.random()*slugs.length)]
-    const link = `/blog/${slug}`
-    return new Response(link,{ status: 302, headers: { 'Location': link } })
-}
+	const slug = slugs[Math.floor(Math.random() * slugs.length)];
+	const link = `/blog/${slug}`;
+	return new Response(link, { status: 302, headers: { Location: link } });
+};

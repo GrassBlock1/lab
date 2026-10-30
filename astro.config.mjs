@@ -7,20 +7,15 @@ import { defineConfig, fontProviders } from "astro/config";
 //import rehypeKatex from "rehype-katex";
 
 import { satteri } from "@astrojs/markdown-satteri";
-
-import {mdastReadingTimePlugin} from '@/plugins/satteri/wordcount.js';
-import {mdastModifiedTimePlugin} from "@/plugins/satteri/modified-time.mjs";
-import {mdastSpoilerPlugin} from "@/plugins/satteri/spoiler.ts";
-import satteriKatex from "satteri-katex";
-
 import node from "@astrojs/node";
 import partytown from "@astrojs/partytown";
+import expressiveCode from 'astro-expressive-code';
+import satteriKatex from "satteri-katex";
 import satteriKatex from "satteri-katex";
 import { mdastDetectMathPlugin } from "@/plugins/satteri/math-detector.ts";
-import { mdastModifiedTimePlugin } from "@/plugins/satteri/modified-time.mjs";
-import { mdastSpoilerPlugin } from "@/plugins/satteri/spoiler.ts";
-import { mdastReadingTimePlugin } from "@/plugins/satteri/wordcount.js";
-import expressiveCode from 'astro-expressive-code';
+import {mdastModifiedTimePlugin, mdastModifiedTimePlugin } from "@/plugins/satteri/modified-time.mjs";
+import {mdastSpoilerPlugin, mdastSpoilerPlugin } from "@/plugins/satteri/spoiler.ts";
+import {mdastReadingTimePlugin, mdastReadingTimePlugin } from '@/plugins/satteri/wordcount.js';
 
 export default defineConfig({
     site: 'https://lab.gb0.dev',

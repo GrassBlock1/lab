@@ -12,11 +12,11 @@ import { siteConfig } from "../config";
 import globalCss from "../styles/global.css?inline";
 
 interface Props {
-  title?: string;
-  description?: string;
-  author?: string;
-  path?: string;
-  ogImage?: string;
+	title?: string;
+	description?: string;
+	author?: string;
+	path?: string;
+	ogImage?: string;
 }
 
 import LanguagePicker from "@/components/helpers/i18n/LanguagePicker.astro";
@@ -44,7 +44,11 @@ const ogTitle = Astro.props.title || defaultTitle;
 const customFooter = siteConfig.customFooter;
 const nekoType = siteConfig.neko?.type;
 
-const { title = pageTitle, author = siteConfig.defaultAuthor.name,description = siteConfig.description, ogImage = "" ,
+const {
+	title = pageTitle,
+	author = siteConfig.defaultAuthor.name,
+	description = siteConfig.description,
+	ogImage = "",
 } = Astro.props;
 ---
 

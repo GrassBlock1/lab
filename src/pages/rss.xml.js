@@ -59,10 +59,10 @@ export async function GET(context) {
 		);
 
 		const authors = await resolveAuthors(post);
-        // Make sure each feed item has required properties with proper formatting
-        feedItems.push({
-            title: post.data.title,
-            description: post.data.description || "",
+		// Make sure each feed item has required properties with proper formatting
+		feedItems.push({
+			title: post.data.title,
+			description: post.data.description || "",
 			pubDate: post.data.date,
 			categories: post.data.categories,
 			author:

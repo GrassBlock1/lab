@@ -6,7 +6,6 @@ import { posts } from "./content/posts/_schemas.ts";
 import { authors } from "./data/authors._schema.ts";
 import remoteYAML from "./plugins/fetch-remote-yaml";
 
-
 const blogCollection = defineCollection({
 	loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/posts" }),
 	schema: posts,
@@ -16,7 +15,9 @@ const pageCollection = defineCollection({
 	loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/pages" }),
 });
 const blogRollData = defineCollection({
-	loader: remoteYAML('https://cdn.jsdelivr.net/gh/GrassBlock1/Friend-of-mine@master/data/links.yaml'),
+	loader: remoteYAML(
+		"https://cdn.jsdelivr.net/gh/GrassBlock1/Friend-of-mine@master/data/links.yaml",
+	),
 	schema: z.object({
 		link: z.string(),
 		avatar: z.string().optional(),

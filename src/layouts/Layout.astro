@@ -1,23 +1,15 @@
 ---
-import '../styles/global.css';
 import { Font } from "astro:assets";
-import Search from '../components/Search.astro';
-import ThemeSwitcher from '../components/ThemeSwitcher.astro';
-import ThemeSwitcher_CSSOnly from '../components/ThemeSwitcher@CSSOnly.astro';
+import { i18n } from "astro:config/client";
+import Meta from "@/components/helpers/head/Meta.astro";
 import BackToTop from "../components/BackToTop.astro";
-import Meta from "../components/helper/head/Meta.astro";
-
-import { siteConfig } from "../config";
-import Statistics from "../components/Statistics.astro";
 import Navbar from "../components/Navbar.astro";
-
-import PoweredBy from "../components/PoweredBy.astro";
-import SPARouter from "../components/helper/spa/SPARouter.astro";
-import Spinner from "../components/helper/spa/Spinner.astro";
-import LanguagePicker from "@/components/helper/i18n/LanguagePicker.astro";
-import {
-    i18n,
-} from "astro:config/client";
+import Search from "../components/Search.astro";
+import Statistics from "../components/Statistics.astro";
+import ThemeSwitcher_CSSOnly from "../components/ThemeSwitcher@CSSOnly.astro";
+import ThemeSwitcher from "../components/ThemeSwitcher.astro";
+import { siteConfig } from "../config";
+import globalCss from "../styles/global.css?inline";
 
 interface Props {
   title?: string;
@@ -27,24 +19,33 @@ interface Props {
   ogImage?: string;
 }
 
-const spaEnabled = siteConfig.spa
+import LanguagePicker from "@/components/helpers/i18n/LanguagePicker.astro";
+import SPARouter from "@/components/helpers/spa/SPARouter.astro";
+import Spinner from "@/components/helpers/spa/Spinner.astro";
+import PoweredBy from "../components/PoweredBy.astro";
 
-const noscript = siteConfig.noClientJavaScript
+const spaEnabled = siteConfig.spa;
 
-const statisticsEnabled = siteConfig.siteAnalytics.enabled
+const noscript = siteConfig.noClientJavaScript;
 
-const defaultTitle = siteConfig.title
-const formattedRootPath = defaultTitle.toLowerCase().replace(/\s+/g, '-');
-const relativePath = Astro.url.pathname
-const path = formattedRootPath + (relativePath === '/' ? '' : relativePath)
+const statisticsEnabled = siteConfig.siteAnalytics.enabled;
 
-const pageTitle = (relativePath === '/' ? defaultTitle : `${Astro.props.title} - ${defaultTitle}`)
-const ogTitle = Astro.props.title || defaultTitle
+const defaultTitle = siteConfig.title;
+const formattedRootPath = defaultTitle.toLowerCase().replace(/\s+/g, "-");
+const relativePath = Astro.url.pathname;
+const path = formattedRootPath + (relativePath === "/" ? "" : relativePath);
 
-const customFooter = siteConfig.customFooter
-const nekoType = siteConfig.neko?.type
+const pageTitle =
+	relativePath === "/"
+		? defaultTitle
+		: `${Astro.props.title} - ${defaultTitle}`;
+const ogTitle = Astro.props.title || defaultTitle;
 
-const { title = pageTitle, author = siteConfig.defaultAuthor.name,description = siteConfig.description, ogImage = "" } = Astro.props;
+const customFooter = siteConfig.customFooter;
+const nekoType = siteConfig.neko?.type;
+
+const { title = pageTitle, author = siteConfig.defaultAuthor.name,description = siteConfig.description, ogImage = "" ,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -53,7 +54,9 @@ const { title = pageTitle, author = siteConfig.defaultAuthor.name,description = 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <style is:inline set:html={globalCss}></style>
     <Font cssVariable="--font-pixel" preload />
+    <slot name="head" />
     <Meta title={ogTitle} author={author} description={description} ogImage={ogImage} />
     <title>{pageTitle}</title>
     {spaEnabled && <SPARouter />}

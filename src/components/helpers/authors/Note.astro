@@ -1,0 +1,29 @@
+---
+import { Image } from "astro:assets";
+import { getEntry } from "astro:content";
+import Callout from "../../shortcodes/Callout.astro";
+
+interface Props {
+	authorId: string;
+}
+
+const { authorId } = Astro.props;
+
+const entry = await getEntry({ collection: "authors", id: authorId });
+const data = entry?.data;
+const authorName = data?.name;
+const authorAvatar = data?.avatar
+	? data.avatar
+	: data?.mcplayerid
+		? `/images/avatars/${data.mcplayerid}.png`
+		: null;
+---
+<Callout type="tip">
+    {authorAvatar && <Fragment slot="icon"><Image class="note-avatar" alt={`avatar of ${authorName}`} width={24} height={24} src={authorAvatar}>{authorAvatar}</Image></Fragment>}
+    <b>{authorName}</b>: <slot />
+</Callout>
+<style>
+    img.note-avatar {
+        margin-right: 1rem;
+    }
+</style>

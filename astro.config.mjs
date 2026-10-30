@@ -1,19 +1,25 @@
-import {defineConfig, fontProviders} from 'astro/config';
+import mdx from "@astrojs/mdx";
 
-import sitemap from '@astrojs/sitemap';
+import sitemap from "@astrojs/sitemap";
+import { defineConfig, fontProviders } from "astro/config";
 
-import mdx from '@astrojs/mdx';
+//import remarkMath from "remark-math";
+//import rehypeKatex from "rehype-katex";
 
-import partytown from '@astrojs/partytown';
-
-import node from '@astrojs/node';
-import {satteri} from "@astrojs/markdown-satteri";
+import { satteri } from "@astrojs/markdown-satteri";
 
 import {mdastReadingTimePlugin} from '@/plugins/satteri/wordcount.js';
 import {mdastModifiedTimePlugin} from "@/plugins/satteri/modified-time.mjs";
 import {mdastSpoilerPlugin} from "@/plugins/satteri/spoiler.ts";
 import satteriKatex from "satteri-katex";
 
+import node from "@astrojs/node";
+import partytown from "@astrojs/partytown";
+import satteriKatex from "satteri-katex";
+import { mdastDetectMathPlugin } from "@/plugins/satteri/math-detector.ts";
+import { mdastModifiedTimePlugin } from "@/plugins/satteri/modified-time.mjs";
+import { mdastSpoilerPlugin } from "@/plugins/satteri/spoiler.ts";
+import { mdastReadingTimePlugin } from "@/plugins/satteri/wordcount.js";
 import expressiveCode from 'astro-expressive-code';
 
 export default defineConfig({
@@ -27,22 +33,28 @@ export default defineConfig({
         "/feed.rss": "/rss.xml",
     },
 
-    build: {
-        format: 'directory'
-    },
+	build: {
+		format: "directory",
+	},
 
     markdown: {
         shikiConfig: {
-            theme: 'nord',
-            wrap: true
+            theme: "nord",
+            wrap: true,
         },
         processor: satteri({
             features: { math: true, rawHtml: true },
-            mdastPlugins: [satteriKatex(),mdastReadingTimePlugin,mdastModifiedTimePlugin,mdastSpoilerPlugin],
+            mdastPlugins: [
+                mdastDetectMathPlugin,
+                satteriKatex(),
+                mdastReadingTimePlugin,
+                mdastModifiedTimePlugin,
+                mdastSpoilerPlugin,
+            ],
         }),
     },
 
-    fonts: [{
+	fonts: [{
         provider: fontProviders.fontsource(),
         name: "Fusion Pixel 12px Monospaced SC",
         cssVariable: "--font-pixel",
@@ -51,26 +63,26 @@ export default defineConfig({
 
     image: {
         responsiveStyles: true,
-        layout: 'constrained',
-    },
+        layout: "constrained",
+	},
 
-    i18n: {
-        locales: [
-            "en",
-            {
-                path: "zh-cn",
-                codes: ["zh-CN"]
-            }
-        ],
-        defaultLocale: "zh-cn",
-        routing: {
-            prefixDefaultLocale: false
-        }
-    },
+	i18n: {
+		locales: [
+			"en",
+			{
+				path: "zh-cn",
+				codes: ["zh-CN"],
+			},
+		],
+		defaultLocale: "zh-cn",
+		routing: {
+			prefixDefaultLocale: false,
+		},
+	},
 
-    integrations: [sitemap(), expressiveCode(), mdx(), partytown()],
+	integrations: [sitemap(), expressiveCode(), mdx(), partytown()],
 
-    adapter: node({
-      mode: 'standalone'
-    })
+	adapter: node({
+		mode: "standalone",
+	}),
 });

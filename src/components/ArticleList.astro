@@ -1,6 +1,12 @@
 ---
-import {getPostSlug} from "@/i18n/utils.ts";
-const { posts, displayDate = false, placeholder = false, limit = 0} = Astro.props;
+import { getPostSlug } from "@/i18n/utils.ts";
+
+const {
+	posts,
+	displayDate = false,
+	placeholder = false,
+	limit = 0,
+} = Astro.props;
 
 const displayedPosts = limit > 0 ? posts.slice(0, limit) : posts;
 ---
@@ -8,7 +14,7 @@ const displayedPosts = limit > 0 ? posts.slice(0, limit) : posts;
     {displayedPosts.map((post: any) => (
             <p>
                 {displayDate && <span class="list-date">{new Date(post.data.date).toISOString().split('T')[0]}</span>}{" "}
-                {post.data.draft && <span class="draft-badge">[draft] </span>}<a href={`${getPostSlug(post.filePath, post.id)}`}>{post.data.title}</a>
+                {post.data.draft && <span class="draft-badge">[draft] </span>}<a href={`${getPostSlug(post.id)}`}>{post.data.title}</a>
             </p>
     ))}
 

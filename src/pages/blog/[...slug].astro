@@ -1,6 +1,11 @@
 ---
+import type { ImageMetadata } from "astro";
+import { getImage } from "astro:assets";
+import { getEntry, render } from "astro:content";
 import PostPage from "@/components/PostPage.astro";
+import { siteConfig } from "@/config";
 import { getPostSlug } from "@/i18n/utils";
+import { ExtractFirstImage } from "@/plugins/extract-images";
 import { getDefaultLocalePosts } from "@/utils/posts";
 
 export async function getStaticPaths() {
@@ -13,37 +18,77 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content, headings, remarkPluginFrontmatter } = await render(entry);
-const noscript = siteConfig.noClientJavaScript
+const noscript = siteConfig.noClientJavaScript;
 const slug = Astro.params.slug;
-const author = Array.isArray(entry.data.author) ? entry.data.author : (entry.data.author !== undefined ? [entry.data.author] : [{collection: 'authors', id: siteConfig.defaultAuthor.id}]);
+const author = Array.isArray(entry.data.author)
+	? entry.data.author
+	: entry.data.author !== undefined
+		? [entry.data.author]
+		: [{ collection: "authors", id: siteConfig.defaultAuthor.id }];
 
 // Get Wordcount and Last Updated Date
 const wordcount = remarkPluginFrontmatter.wordcount;
-const lastUpdated = entry.data.updated ? entry.data.updated : remarkPluginFrontmatter.lastModified;
+const lastUpdated = entry.data.updated
+	? entry.data.updated
+	: remarkPluginFrontmatter.lastModified;
 
-const pubDate = new Date(entry.data.date).toISOString().split('T')[0]
-const lastUpdatedDate = new Date(lastUpdated).toISOString().split('T')[0]
+const pubDate = new Date(entry.data.date).toISOString().split("T")[0];
+const lastUpdatedDate = new Date(lastUpdated).toISOString().split("T")[0];
 
 // Get author data
-const authorData = await Promise.all((author).map((singleAuthor) => getEntry(singleAuthor).then(authorEntry => authorEntry?.data)))
-const authorInfo =  authorData.includes(undefined) ? [{data: siteConfig.defaultAuthor}] : authorData;
+const authorData = await Promise.all(
+	author.map((singleAuthor) =>
+		getEntry(singleAuthor).then((authorEntry) => authorEntry?.data),
+	),
+);
+const authorInfo = authorData.includes(undefined)
+	? [{ data: siteConfig.defaultAuthor }]
+	: authorData;
 
 // get featured image and use it as og:image
 // use the custom cover image if it exists, otherwise use the featured image file in the same directory
-const featuredImages = import.meta.glob(`/src/content/posts/*/featured.{avif,png,jpg,jpeg,webp}`,{import:'default',eager:true});
+const featuredImages = import.meta.glob(
+	`/src/content/posts/*/featured.{avif,png,jpg,jpeg,webp}`,
+	{ import: "default", eager: true },
+);
 const customFeaturedImage = entry.data.cover;
 
 /* optimize the og:image */
-const optimizedCustomFeaturedImage = customFeaturedImage && typeof customFeaturedImage === 'object' && 'src' in customFeaturedImage && customFeaturedImage.src.startsWith('http') ? customFeaturedImage : customFeaturedImage && typeof customFeaturedImage === 'string' ? customFeaturedImage : customFeaturedImage ? await getImage({src: customFeaturedImage, width: 1080, format: 'webp'}) : null;
+const optimizedCustomFeaturedImage =
+	customFeaturedImage &&
+	typeof customFeaturedImage === "object" &&
+	"src" in customFeaturedImage &&
+	customFeaturedImage.src.startsWith("http")
+		? customFeaturedImage
+		: customFeaturedImage && typeof customFeaturedImage === "string"
+			? customFeaturedImage
+			: customFeaturedImage
+				? await getImage({
+						src: customFeaturedImage,
+						width: 1080,
+						format: "webp",
+					})
+				: null;
 
-const matchedImage = Object.keys(featuredImages).find(path => path.includes(slug));
+const matchedImage = Object.keys(featuredImages).find((path) =>
+	path.includes(slug),
+);
 let matchedImage_src;
 if (matchedImage && !customFeaturedImage) {
-    matchedImage_src = await getImage({src: featuredImages[matchedImage] as ImageMetadata, format: 'webp'}) || null;
+	matchedImage_src =
+		(await getImage({
+			src: featuredImages[matchedImage] as ImageMetadata,
+			format: "webp",
+		})) || null;
 }
-const firstImageURL = await ExtractFirstImage(Content)
+const firstImageURL = await ExtractFirstImage(Content);
 
-const headerImage = customFeaturedImage || matchedImage_src?.src || '';
-const cover = optimizedCustomFeaturedImage || matchedImage_src?.src || firstImageURL || `/blog/${slug}/featured.png` || '';
+const headerImage = customFeaturedImage || matchedImage_src?.src || "";
+const cover =
+	optimizedCustomFeaturedImage ||
+	matchedImage_src?.src ||
+	firstImageURL ||
+	`/blog/${slug}/featured.png` ||
+	"";
 ---
 <PostPage entry={entry} />

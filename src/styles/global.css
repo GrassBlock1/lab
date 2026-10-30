@@ -307,7 +307,7 @@ div.content {
     Highlighted Code Blocks
     pre.astro-code,
     pre.astro-code span {
-      /* biome-ignore lint/complexity/noImportantStyles: Shiki 以行内样式写背景色，只有 !important 能覆盖 */background-color: #3b4252 !important;
+      background-color: #3b4252 !important;
     } */
     div.expressive-code {
         padding: 1rem 0;

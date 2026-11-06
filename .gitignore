@@ -26,3 +26,9 @@ pnpm-debug.log*
 
 # activitypub files
 data/
+
+# Tencent Cloud EdgeOne
+.env
+.edgeone/*
+.tef_dist/*
+  

@@ -314,12 +314,12 @@ div.content {
     pre.astro-code span {
       background-color: #3b4252 !important;
     } */
-    div.expressive-code {
-        padding: 1rem 0;
-    }
-    pre code {
-        font-family: var(--font-pixel), monospace;
-    }
+	div.expressive-code {
+		padding: 1rem 0;
+	}
+	pre code {
+		font-family: var(--font-pixel), monospace;
+	}
 
 	table {
 		border-collapse: collapse;

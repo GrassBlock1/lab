@@ -10,7 +10,8 @@
 		"preview": "astro preview",
 		"astro": "astro",
 		"sync:local": "elog sync -e .elog.env",
-		"sync": "elog sync"
+		"sync": "elog sync",
+		"deploy": "pnpx edgeone makers deploy"
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "^14.4.3",

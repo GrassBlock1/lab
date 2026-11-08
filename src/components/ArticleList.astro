@@ -10,7 +10,7 @@ const {
 
 const displayedPosts = limit > 0 ? posts.slice(0, limit) : posts;
 ---
-<div style="margin-top: 1rem; margin-left: 1rem;">
+<div>
     {displayedPosts.map((post: any) => (
             <p>
                 {displayDate && <span class="list-date">{new Date(post.data.date).toISOString().split('T')[0]}</span>}{" "}

@@ -1,0 +1,13 @@
+---
+import ArticleList from "@/components/ArticleList.astro";
+import { getDefaultLocalePosts, sortByDateDesc } from "@/utils/posts";
+
+interface Props {
+	limit?: number;
+}
+
+const { limit = 5 } = Astro.props;
+const posts = sortByDateDesc(await getDefaultLocalePosts());
+---
+
+<ArticleList posts={posts} displayDate={true} placeholder={true} limit={limit} />

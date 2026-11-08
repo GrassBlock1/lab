@@ -24,7 +24,9 @@ const t = useTranslations(lang);
 
     <div style="margin-top: 2rem;">
       <span class="command">ls -la posts/</span>
-      <ArticleList posts={posts} displayDate={true} placeholder={true} />
+      <div class="article-list">
+        <ArticleList posts={posts} displayDate={true} placeholder={true} />
+      </div>
     </div>
 
     <div style="margin-top: 2rem;">
@@ -34,3 +36,9 @@ const t = useTranslations(lang);
     </div>
   </div>
 </BaseLayout>
+<style>
+  div.article-list {
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }
+</style>

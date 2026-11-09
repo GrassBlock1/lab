@@ -206,7 +206,11 @@ export const siteConfig = {
 		// set this to false if you want to use your own robots.txt
 		generate: true,
 		// comment to prepend before actual content, defaults to nothing.
-		customText: null as string | null,
+		customText:
+			"Robots may not injure a human being or, through inaction, allow a human being to come to harm.\n" +
+			"Robots have seen things you people wouldn’t believe.\n" +
+			"Robots are Your Plastic Pal Who’s Fun To Be With.\n" +
+			"Robots have shiny metal posteriors which should not be bitten.",
 		// add sitemap link (Sitemap: https://<YOUR SITE>/sitemap-index.xml) after rules
 		sitemap: true,
 		// robots.txt defaults to:
@@ -217,17 +221,13 @@ export const siteConfig = {
 			// equals to 'Disallow: /'
 			disallowAll: false,
 			// add common AI bots to disallow list, note not all AI bots respect this.
-			disallowAI: false,
+			disallowAI: true,
 		},
 		// custom rules
 		// these will be prepended to existing rules
 		custom: [
 			{
-				path: "/",
-				allow: "*",
-			},
-			{
-				path: "/login",
+				path: "/harm",
 				disallow: "*",
 			},
 		],

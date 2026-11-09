@@ -14,7 +14,7 @@ export const siteConfig = {
 	// enable PWA, which will allow users install the site as a web app on their device
 	pwa: false,
 	// disable client-side JavaScript, this will:
-	// 1. disable most built-in client-side JavaScript from rendering (protected content component and umami still needs javascript to function, sorry)
+	// 1. disable most built-in client-side JavaScript from rendering (protected content component and umami still needs JavaScript to function, sorry)
 	// 2. the full text search will be redirected to a search engine
 	// 3. the comments will be globally disabled
 	// 4. the night mode & back to top will not use JavaScript to function
@@ -198,5 +198,38 @@ export const siteConfig = {
 		enabled: false,
 		// Choose a neko. For a full list, check https://webneko.net/
 		type: "mike",
+	},
+	// robots.txt
+	// configure how robots.txt will be generated.
+	robots: {
+		// the global switch
+		// set this to false if you want to use your own robots.txt
+		generate: true,
+		// comment to prepend before actual content, defaults to nothing.
+		customText: null as string | null,
+		// add sitemap link (Sitemap: https://<YOUR SITE>/sitemap-index.xml) after rules
+		sitemap: true,
+		// robots.txt defaults to:
+		// User-agent: *
+		// Disallow:
+		// but you can customize with some presets:
+		presets: {
+			// equals to 'Disallow: /'
+			disallowAll: false,
+			// add common AI bots to disallow list, note not all AI bots respect this.
+			disallowAI: false,
+		},
+		// custom rules
+		// these will be prepended to existing rules
+		custom: [
+			{
+				path: "/",
+				allow: "*",
+			},
+			{
+				path: "/login",
+				disallow: "*",
+			},
+		],
 	},
 };

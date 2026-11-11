@@ -1,10 +1,6 @@
 ---
 import BaseLayout from "../layouts/Base.astro";
 
-// The EdgeOne adapter's 404 fallback renders this route for a synthesized
-// `/404` request, so it has to be rendered on demand rather than prerendered.
-export const prerender = false;
-
 const notFoundPath = Astro.url.pathname;
 ---
 
@@ -15,14 +11,14 @@ const notFoundPath = Astro.url.pathname;
         <p>
             sh: <span class="path" data-ssr-path={notFoundPath}>~{notFoundPath}</span>: command not found.
         </p>
-        { notFoundPath === '/404' && <script>
+        { notFoundPath.startsWith('/404') && <script>
             // Some hostings render this page at `/404`, so the server-side
             // notFoundPath only tells us the path the server saw. When it is
             // `/404` the real path is only known in the browser.
             const pathEl = document.querySelector("p .path");
             const ssrPath = pathEl?.getAttribute("data-ssr-path")
             const showRequestedPath = () => {
-                if (ssrPath !== "/404") return;
+                if (! ssrPath?.startsWith("/404")) return;
                 let requestedPath = location.pathname;
                 try {
                     requestedPath = decodeURI(requestedPath);

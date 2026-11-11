@@ -3,3 +3,6 @@ onlyBuiltDependencies:
   - keytar
   - sharp
   - workerd
+
+patchedDependencies:
+  '@edgeone/astro@1.1.5': patches/@edgeone__astro@1.1.5.patch

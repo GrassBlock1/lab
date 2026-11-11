@@ -1,0 +1,96 @@
+diff --git a/dist/lib/config.js b/dist/lib/config.js
+--- a/dist/lib/config.js
++++ b/dist/lib/config.js
+@@ -16,13 +16,13 @@ export function createSimpleServerPackageJson(serverDir) {
+     writeFileSync(join(serverDir, 'package.json'), JSON.stringify(serverPackageJson, null, 2));
+ }
+-function getMatchPattern(segments) {
++function getMatchPattern(segments, destination = false) {
+     return segments
+         .map((segment) => {
+         return segment
+             .map((part) => {
+             if (part.spread) {
+                 const paramName = part.content.startsWith('...') ? part.content.slice(3) : part.content;
+-                return `:${paramName}*`;
++                return `:${paramName}${destination ? '' : '*'}`;
+             }
+             if (part.dynamic) {
+                 return `:${part.content}`;
+@@ -38,6 +38,6 @@ function getMatchPattern(segments) {
+  */
+ function getRedirectLocation(route, base) {
+     if (route.redirectRoute) {
+-        const pattern = getMatchPattern(route.redirectRoute.segments);
++        const pattern = getMatchPattern(route.redirectRoute.segments, true);
+         return posix.join(base, pattern).replace(/\/\//g, '/');
+     }
+diff --git a/dist/lib/server-entry.js b/dist/lib/server-entry.js
+--- a/dist/lib/server-entry.js
++++ b/dist/lib/server-entry.js
+@@ -1,13 +1,17 @@
+ /**
+  * Server entry file generation utilities
+  */
+-import { writeFileSync, copyFileSync } from 'node:fs';
++import { writeFileSync, copyFileSync, existsSync } from 'node:fs';
+ import { join } from 'node:path';
+ import { fileURLToPath } from 'node:url';
+-import { DEFAULT_PORT } from './constants.js';
++import { ASSETS_DIR, DEFAULT_PORT } from './constants.js';
+ /**
+  * Create server entry file handler.js, and ship the ISR runtime module next to
+  * it so the handler's `import './isr-runtime.js'` resolves at runtime.
+  */
+ export function createServerEntryFile(serverDir, serverEntryFile, port = DEFAULT_PORT) {
++    const notFoundPage = join(serverDir, '..', '..', ASSETS_DIR, '404.html');
++    if (existsSync(notFoundPage)) {
++        copyFileSync(notFoundPage, join(serverDir, '404.html'));
++    }
+     const indexContent = generateServerEntryContent(serverEntryFile, port);
+diff --git a/dist/server.js b/dist/server.js
+--- a/dist/server.js
++++ b/dist/server.js
+@@ -1,6 +1,14 @@
+ import { App } from 'astro/app';
++import { readFile } from 'node:fs/promises';
+ export function createExports(manifest) {
+     const app = new App(manifest);
++    const prerenderedErrorPageFetch = async (url) => {
++        if (new URL(url).pathname !== '/404.html') return fetch(url);
++        const body = await readFile(new URL('./404.html', import.meta.url));
++        return new Response(body, {
++            headers: { 'content-type': 'text/html; charset=utf-8' },
++        });
++    };
+     const handler = async (request) => {
+         // Match route using Astro's App
+         const routeData = app.match(request);
+@@ -7,19 +15,3 @@ export function createExports(manifest) {
+         if (!routeData) {
+-            // Try to render 404 page if no route matches
+-            const url = new URL(request.url);
+-            const notFoundUrl = new URL('/404', url.origin);
+-            const notFoundRequest = new Request(notFoundUrl.toString(), {
+-                method: request.method,
+-                headers: request.headers,
+-            });
+-            const notFoundRouteData = app.match(notFoundRequest);
+-            if (notFoundRouteData) {
+-                // Render the 404 page
+-                return app.render(notFoundRequest, {
+-                    routeData: notFoundRouteData,
+-                    addCookieHeader: true,
+-                });
+-            }
+-            // If no 404 page exists, return a simple 404 response
+-            return new Response('Not found', { status: 404 });
++            return app.render(request, { addCookieHeader: true, prerenderedErrorPageFetch });
+         }
+@@ -26,5 +18,5 @@ export function createExports(manifest) {
+         // addCookieHeader: true tells Astro to serialize cookies set via
+         // Astro.cookies.set() into the response's Set-Cookie header. Without it,
+         // those cookies stay on an internal symbol and are silently dropped.
+-        return app.render(request, { routeData, addCookieHeader: true });
++        return app.render(request, { routeData, addCookieHeader: true, prerenderedErrorPageFetch });
+     };

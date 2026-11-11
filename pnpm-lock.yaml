@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@edgeone/astro@1.1.5':
+    hash: eaa5e3179156861e962dd0ad608767a7503629f71a0c262258ed1a63bf121a1f
+    path: patches/@edgeone__astro@1.1.5.patch
+
 importers:
 
   .:
@@ -83,7 +88,7 @@ importers:
         version: 2.6.4
       '@edgeone/astro':
         specifier: ^1.1.5
-        version: 1.1.5(astro@7.4.4(@types/node@22.20.4)(esbuild@0.28.2)(tsx@4.23.14)(yaml@2.9.1))
+        version: 1.1.5(patch_hash=eaa5e3179156861e962dd0ad608767a7503629f71a0c262258ed1a63bf121a1f)(astro@7.4.4(@types/node@22.20.4)(esbuild@0.28.2)(tsx@4.23.14)(yaml@2.9.1))
       '@milkdown/crepe':
         specifier: ^7.20.0
         version: 7.22.1(prosemirror-model@1.25.11)(prosemirror-state@1.4.4)(prosemirror-view@1.42.4)(typescript@4.9.5)
@@ -5775,7 +5780,7 @@ snapshots:
 
   '@ctrl/tinycolor@4.2.1': {}
 
-  '@edgeone/astro@1.1.5(astro@7.4.4(@types/node@22.20.4)(esbuild@0.28.2)(tsx@4.23.14)(yaml@2.9.1))':
+  '@edgeone/astro@1.1.5(patch_hash=eaa5e3179156861e962dd0ad608767a7503629f71a0c262258ed1a63bf121a1f)(astro@7.4.4(@types/node@22.20.4)(esbuild@0.28.2)(tsx@4.23.14)(yaml@2.9.1))':
     dependencies:
       '@vercel/nft': 0.27.10
       astro: 7.4.4(@types/node@22.20.4)(esbuild@0.28.2)(tsx@4.23.14)(yaml@2.9.1)

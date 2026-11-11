@@ -1,25 +1,47 @@
 ---
 import BaseLayout from "../layouts/Base.astro";
 
+// The EdgeOne adapter's 404 fallback renders this route for a synthesized
+// `/404` request, so it has to be rendered on demand rather than prerendered.
+export const prerender = false;
+
 const notFoundPath = Astro.url.pathname;
 ---
 
 <BaseLayout title="404" description="Page not found">
-  <h1 class="title">command not found.</h1>
-  
-  <div class="content">
-    <p class="typewriter">sh: <span class="path">~{notFoundPath}</span>: command not found.</p>
-    
-    <div style="margin-top: 2rem;">
-      <span class="command">help</span>
-      <div style="margin-top: 1rem; margin-left: 1rem;">
+    <h1 class="title">command not found.</h1>
+
+    <div class="content">
         <p>
-          Looks like this is an unknown command or file, try:
+            sh: <span class="path" data-ssr-path={notFoundPath}>~{notFoundPath}</span>: command not found.
         </p>
-        <p>
-          <a href="/">Return to Home</a>
-        </p>
-      </div>
+        { notFoundPath === '/404' && <script>
+            // Some hostings render this page at `/404`, so the server-side
+            // notFoundPath only tells us the path the server saw. When it is
+            // `/404` the real path is only known in the browser.
+            const pathEl = document.querySelector("p .path");
+            const ssrPath = pathEl?.getAttribute("data-ssr-path")
+            const showRequestedPath = () => {
+                if (ssrPath !== "/404") return;
+                let requestedPath = location.pathname;
+                try {
+                    requestedPath = decodeURI(requestedPath);
+                } catch {}
+
+                if (pathEl) pathEl.textContent = `~${requestedPath}`;
+            };
+            showRequestedPath();
+            document.addEventListener("astro:page-load", showRequestedPath);
+        </script>}
+
+        <div style="margin-top: 2rem;">
+            <span class="command">help</span>
+            <div style="margin-top: 1rem; margin-left: 1rem;">
+                <p>Looks like this is an unknown command or file, try:</p>
+                <p>
+                    <a href="/">Return to Home</a>
+                </p>
+            </div>
+        </div>
     </div>
-  </div>
 </BaseLayout>

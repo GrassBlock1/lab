@@ -13,7 +13,7 @@ const formats = {
 	jpeg: "image/jpeg",
 };
 
-// 静态渲染：构建时把每种格式都生成一份
+// render every format while building
 export function getStaticPaths() {
 	return Object.keys(formats).map((format) => ({ params: { format } }));
 }

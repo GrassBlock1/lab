@@ -98,7 +98,7 @@ export const siteConfig = {
 		type: "artalk",
 		// artalk config
 		artalk: {
-			instanceDomain: "artalk.gb0.dev", // the domain of your artalk instance
+			instanceDomain: "comments.lab.gb0.dev", // the domain of your artalk instance
 			site: "lab@GB", // the site name of the current site in artalk dashboard, default is "default"
 		},
 		giscus: {

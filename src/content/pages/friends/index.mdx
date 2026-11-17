@@ -13,3 +13,30 @@ import BlogRoll from '/src/components/shortcodes/BlogRoll.astro';
 相关公告会在 [Issues](https://github.com/GrassBlock1/Friend-of-mine/issues) 发布。
 
 <BlogRoll/>
+
+## 另外提供
+<div>
+    <a href="https://bo.ke/?utm_source=lab.gb0.dev"><img class="friend-org-logo" src="https://bo.ke/assets/mark-dark.svg" style="width:auto;height:32px;" alt={"博客大联盟"}></img></a>
+    <a href="https://www.foreverblog.cn/" target="_blank" title="十年之约成员博客"><img class="friend-org-logo" src="https://www.foreverblog.cn/assets/logo/logo_v2_black.png" alt="十年之约" style="width:auto;height:32px;"></img></a>
+</div>
+
+<style>{`
+  .friend-org-logo {
+    filter: invert(1);
+  }
+
+  :root[data-theme="light"] .friend-org-logo,
+  :root:has(.theme-toggle:checked) .friend-org-logo {
+    filter: none;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .friend-org-logo {
+      filter: none;
+    }
+
+    :root:has(.theme-toggle:checked) .friend-org-logo {
+      filter: invert(1);
+    }
+  }
+`}</style>
